@@ -5,7 +5,6 @@
 #include <string.h>
 int gameblock[4][4] = {0};
 
-srand(time(NULL));
 void printgame()
 {
   int i,o;
@@ -326,6 +325,7 @@ int decwin(void)
 
 int main(void)
 {
+  srand(time(NULL));
   Default();
   char move;
   char c;
