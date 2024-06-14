@@ -5,6 +5,7 @@
 #include <string.h>
 int gameblock[4][4] = {0};
 
+srand(time(NULL));
 void printgame()
 {
   int i,o;
@@ -84,7 +85,6 @@ void printgame()
 void RandomNum(void)
 {
   int number,i,o,u;
-  srand(time(NULL));
   do
   { 
     i = rand()%4;
