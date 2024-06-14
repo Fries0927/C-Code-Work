@@ -8,7 +8,7 @@ int gameblock[4][4] = {0};
 void printgame()
 {
   int i,o;
-  printf("\033[H\033[2J");
+  //printf("\033[H\033[2J");
   for(i = 0;i <= 3;i++)
   {
     printf("---------------------\n");
@@ -106,11 +106,13 @@ void RandomNum(void)
 }
 void movement(char value)
 {
-  int i ,o, u,counter = 0;
+  int i ,o, u,counter = 0,merged[4] = {0},clean[4] = {0},clear;
   if(value == 'w')
   {
     for(o=0;o<=3;o++)
     {
+      for(clear=0;clear<=3;clear++)
+        merged[clear] = clean[clear];
       for(i=0;i<=2;i++)
       {
         for(u=1;u<=3-i;u++)
@@ -119,15 +121,18 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i+u][o];
             gameblock[i+u][o] = 0;
+            counter ++;
           }
         }
       }
       for(i=0;i<=2;i++)
       {
-        if(gameblock[i][o]==gameblock[i+1][o])
+        if(gameblock[i][o]==gameblock[i+1][o] && gameblock[i+1][o] != 0 && merged[i] == 0)
         {
           gameblock[i][o]*=2;
           gameblock[i+1][o] = 0;
+          merged[i] = 1;
+          counter ++;
         }
       }
       for(i=0;i<=2;i++)
@@ -138,6 +143,7 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i+u][o];
             gameblock[i+u][o] = 0;
+            counter ++;
           }
         }
       }
@@ -147,6 +153,8 @@ void movement(char value)
   {
     for(o=0;o<=3;o++)
     {
+      for(clear=0;clear<=3;clear++)
+        merged[clear] = clean[clear];
       for(i=3;i>=1;i--)
       {
         for(u=1;u<=i;u++)
@@ -155,15 +163,19 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i-u][o];
             gameblock[i-u][o] = 0;
+            counter ++;
           }
         }
       }
       for(i=3;i>=1;i--)
       {
-        if(gameblock[i][o]==gameblock[i-1][o])
+        if(gameblock[i][o]==gameblock[i-1][o] && gameblock[i-1][o] != 0 && merged[i] == 0)
         {
           gameblock[i][o]*=2;
           gameblock[i-1][o] = 0;
+          merged[i] = 1;
+          counter ++;
+          merged[i] = 1;
         }
       }
       for(i=3;i>=1;i--)
@@ -174,6 +186,7 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i-u][o];
             gameblock[i-u][o] = 0;
+            counter ++;
           }
         }
       }
@@ -183,6 +196,8 @@ void movement(char value)
   {
     for(i=0;i<=3;i++)
     {
+      for(clear=0;clear<=3;clear++)
+        merged[clear] = clean[clear];
       for(o=0;o<=2;o++)
       {
         for(u=1;u<=3-o;u++)
@@ -191,15 +206,18 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i][o+u];
             gameblock[i][o+u] = 0;
+            counter ++;
           }
         }
       }
       for(o=0;o<=2;o++)
       {
-        if(gameblock[i][o]==gameblock[i][o+1])
+        if(gameblock[i][o]==gameblock[i][o+1] && gameblock[i][o+1] != 0 && merged[o] == 0)
         {
           gameblock[i][o]*=2;
           gameblock[i][o+1] = 0;
+          counter ++;
+          merged[o] = 1;
         }
       }
       for(o=0;o<=2;o++)
@@ -210,6 +228,7 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i][o+u];
             gameblock[i][o+u] = 0;
+            counter ++;
           }
         }
       }
@@ -219,6 +238,8 @@ void movement(char value)
   {
     for(i=0;i<=3;i++)
     {
+      for(clear=0;clear<=3;clear++)
+        merged[clear] = clean[clear];
       for(o=3;o>=1;o--)
       {
         for(u=1;u<=o;u++)
@@ -227,15 +248,18 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i][o-u];
             gameblock[i][o-u] = 0;
+            counter ++;
           }
         }
       }
       for(o=3;o>=1;o--)
       {
-        if(gameblock[i][o]==gameblock[i][o-1])
+        if(gameblock[i][o]==gameblock[i][o-1] && gameblock[i][o-1] != 0 && merged[o] == 0)
         {
           gameblock[i][o]*=2;
           gameblock[i][o-1] = 0;
+          counter ++;
+          merged[o] = 1;
         }
       }
       for(o=3;o>=1;o--)
@@ -246,10 +270,15 @@ void movement(char value)
           {
             gameblock[i][o] = gameblock[i][o-u];
             gameblock[i][o-u] = 0;
+            counter ++;
           }
         }
       }
     }
+  }
+  if(counter>0)
+  {
+    RandomNum();
   }
 }
 
@@ -294,6 +323,7 @@ int decwin(void)
     return 0;
   }
 }
+
 int main(void)
 {
   Default();
@@ -306,7 +336,7 @@ int main(void)
     win = decwin();
     if(win == 0)
     {
-      RandomNum();
+      
     }
     else if(win == 1)
     {
