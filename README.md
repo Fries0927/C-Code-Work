@@ -1,1 +1,1 @@
-My C and Python code work
+My C code work
